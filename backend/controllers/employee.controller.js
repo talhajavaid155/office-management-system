@@ -8,10 +8,7 @@ const getAllEmployees = asyncHandler(async (req, res) => {
     const employees = await Employee.findAll();
     res.status(200).json({ employees });
   } catch (error) {
-    console.log(
-      "🚀 ~ file: employee.controller.js ~ line 8 ~ getAllEmployees ~ error",
-      error
-    );
+    console.log("error ", error);
     res.status(500);
     throw error;
   }
@@ -111,7 +108,7 @@ const deleteSingleEmployee = asyncHandler(async (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error deleting Employee with id=aaaa" + id,
+        message: "Error deleting Employee with id=" + id,
       });
     });
 });

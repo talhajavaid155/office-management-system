@@ -8,10 +8,7 @@ const getAllProjects = asyncHandler(async (req, res) => {
     const projects = await Project.findAll();
     res.status(200).json({ projects });
   } catch (error) {
-    console.log(
-      "🚀 ~ file: employee.controller.js ~ line 8 ~ getAllEmployees ~ error",
-      error
-    );
+    console.log("error ", error);
     res.status(500);
     throw error;
   }
@@ -95,7 +92,6 @@ const deleteSingleProject = asyncHandler(async (req, res) => {
   const id = req.params.id;
   Project.destroy({
     where: { id: id },
-    
   })
     .then((num) => {
       if (num == 1) {
