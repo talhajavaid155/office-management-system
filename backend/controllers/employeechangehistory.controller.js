@@ -1,22 +1,22 @@
 const db = require("../models");
-const EmployeeChangeHistory = db.employeechangehistory;
+const EmployeeChangeHistory = db.employeeChangeHistory;
 const asyncHandler = require("express-async-handler");
 
 // Post History
 
 const addHistory = asyncHandler(async (req, res) => {
   // Validate Request
-  if (!req.body.employeeResignation) {
+  if (!req.body.Resignation) {
     res.status(400).send({
       message: "Content can not be empty!",
     });
     return;
   }
-  const employeechangehistory = {
-    employeeResignation: req.body.employeeResignation,
+  const employeeChangeHistory = {
+    Resignation: req.body.Resignation,
   };
   // Save History in the database
-  EmployeeChangeHistory.create(employeechangehistory)
+  EmployeeChangeHistory.create(employeeChangeHistory)
     .then((data) => {
       res.send(data);
     })
@@ -30,8 +30,8 @@ const addHistory = asyncHandler(async (req, res) => {
 // Get All History
 const getAllHistory = asyncHandler(async (req, res) => {
   try {
-    const employeechangehistory = await EmployeeChangeHistory.findAll();
-    res.status(200).json({ employeechangehistory });
+    const employeeChangeHistory = await EmployeeChangeHistory.findAll();
+    res.status(200).json({ employeeChangeHistory });
   } catch (error) {
     console.log("error", error);
     res.status(500);
