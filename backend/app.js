@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 var corsOptions = {
-  origin: "http://localhost:8081",
+  origin: "http://localhost:3000",
 };
 
 const EmployeeRouter = require("./routes/employee.routes");

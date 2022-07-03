@@ -6,7 +6,12 @@ const asyncHandler = require("express-async-handler");
 const getAllEmployees = asyncHandler(async (req, res) => {
   try {
     const employees = await Employee.findAll();
-    res.status(200).json({ employees });
+    res.status(200).json({
+      employees: employees,
+      message: "Employee Data fetched successfully.",
+      statusCode: 200,
+      status: "Success",
+    });
   } catch (error) {
     console.log("error ", error);
     res.status(500);
@@ -34,12 +39,19 @@ const addEmployee = asyncHandler(async (req, res) => {
   // Save Employee in the database
   Employee.create(employee)
     .then((data) => {
-      res.send(data);
+      res.send({
+        data: data,
+        message: err.message || "Employee Data fetched successfully.",
+        statusCode: 200,
+        status: "Success",
+      });
     })
     .catch((err) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while creating the Tutorial.",
+        statusCode: 500,
+        status: "Error",
       });
     });
 });
