@@ -13,7 +13,17 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
     },
     DOB: {
-      type: Sequelize.DATE,
+      type: Sequelize.DATEONLY,
+    },
+    userName: {
+      type: Sequelize.STRING,
+    },
+    Password: {
+      type: Sequelize.STRING,
+    },
+    isAdmin: {
+      type: Sequelize.INTEGER,
+      defaultValue: "0",
     },
   });
   return Employee;

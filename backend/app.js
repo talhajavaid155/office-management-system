@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+
 const cors = require("cors");
 const app = express();
 var corsOptions = {
@@ -10,9 +12,11 @@ const EmployeeRouter = require("./routes/employee.routes");
 const ProjectRouter = require("./routes/project.routes");
 const DepartmentRouter = require("./routes/department.routes");
 const DesignationRouter = require("./routes/designation.routes");
-const EmployeeChangeHistoryRouter = require("./routes/employeechangehistory.routes");
-app.use(cors(corsOptions));
+const EmployeeChangeHistoryRouter = require("./routes/employeeChangeHistory.routes");
+// const UserRouter = require("./routes/user.routes");
 
+app.use(cors(corsOptions));
+app.use(cookieParser());
 const db = require("./models");
 
 // parse requests of content-type - application/json
@@ -26,6 +30,7 @@ app.use("/projects", ProjectRouter);
 app.use("/department", DepartmentRouter);
 app.use("/designation", DesignationRouter);
 app.use("/employeechangehistory", EmployeeChangeHistoryRouter);
+// app.use("/auth", UserRouter);
 
 // require("./routes/tutorial.routes")(app);
 // set port, listen for requests

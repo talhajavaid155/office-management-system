@@ -9,7 +9,7 @@ const {
   getSingleEmployeeHistory,
   updateSingleEmployeeHistory,
   deleteSingleEmployeeHistory,
-} = require("../controllers/employeechangehistory.controller");
+} = require("../controllers/employeeChangeHistory.controller");
 
 const router = express.Router();
 
