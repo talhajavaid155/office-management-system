@@ -7,12 +7,16 @@ import { EmployeeContextType } from "../../interfaces/EmployeeInterface";
 import { Employee } from "../../interfaces/EmployeeInterface";
 import Swal from "sweetalert2";
 import EmployeeForm from "./EmployeeForm";
-// import withReactContent from "sweetalert2-react-content";
-
-// const EmployeeSwal = withReactContent(Swal);
 
 const Employees = () => {
-  const [currentEditingEmployee, setcurrentEditingEmployee] = useState({});
+  const [currentEditingEmployee, setcurrentEditingEmployee] =
+    useState<Employee>({
+      firstName: "",
+      lastName: "",
+      Gender: "",
+      Address: "",
+      DOB: "",
+    });
   const { employees, setEmployees, showTasks } = useContext(
     EmployeeContext
   ) as EmployeeContextType;
@@ -55,8 +59,6 @@ const Employees = () => {
   return (
     <div className="p-7">
       <EmployeeForm employeeFormData={currentEditingEmployee} />
-      {/* <EmployeeForm employeeData={currentlyEdtiitng}/> */}
-      {/* table */}
       <div className="mt-4 flex flex-col">
         <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

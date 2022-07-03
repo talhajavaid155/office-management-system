@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { EmployeeApi } from "../../api/Employee";
 import { EmployeeContext } from "../../context/EmployeeContext";
 import { EmployeeContextType } from "../../interfaces/EmployeeInterface";
@@ -16,22 +16,9 @@ const AddEmployee = (props: any) => {
   const [address, setAddress] = useState("");
   const [dob, setDOB] = useState("");
 
-  // const postEmployee = () => {
-  //   EmployeeApi.post("", {
-  //     firstName: firstName,
-  //     lastName: lastName,
-  //     Gender: gender,
-  //     Address:address,
-  //     DOB: dob,
-  //   }).then((response) => {
-  //     // setEmployees([response.data, ...employees]);
-  //     console.log(response.data);
-  //   });
-  // };
   const onSubmit = (e: any) => {
     e.preventDefault();
-    // const employee = { firstName, lastName, gender, address, dob };
-    // postEmployee(employee);
+
     EmployeeApi.post("", {
       firstName: firstName,
       lastName: lastName,
@@ -39,7 +26,6 @@ const AddEmployee = (props: any) => {
       Address: address,
       DOB: dob,
     }).then((response) => {
-      // setEmployees([response.data, ...employees]);
       console.log(response.data);
     });
     setfirstName("");

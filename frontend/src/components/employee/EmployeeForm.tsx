@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Employee } from "../../interfaces/EmployeeInterface";
 import _ from "lodash";
-const EmployeeForm = ({ employeeFormData }: any) => {
-  // const { employeeFormData } = props;
-  console.log(
-    "🚀 ~ file: EmployeeForm.tsx ~ line 6 ~ EmployeeForm ~ employeeFormData",
-    employeeFormData
-  );
-  // _.get(employeeFormData,firstName)
-  console.log(
-    "🚀 ~ file: EmployeeForm.tsx ~ line 11 ~ EmployeeForm ~ _.get(employeeFormData,firstName)",
-    _.get(employeeFormData, employeeFormData.firstName)
-  );
+import { EmployeeApi } from "../../api/Employee";
+import Swal from "sweetalert2";
+const EmployeeForm = (props: any) => {
+  const employeeData: Employee = props.employeeFormData;
+  const [formData, setformData] = useState(employeeData);
+  useEffect(() => {
+    setformData(employeeData);
+  }, [employeeData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setformData({ ...formData, [name]: value });
+  };
+
+  const updateEmployeeHandler = async (e: any) => {
+    e.preventDefault();
+    const response = await EmployeeApi.put(
+      `/employees/${formData.id}`,
+      formData
+    );
+
+    Swal.fire({
+      title: "Form Updated Successfully",
+
+      icon: "success",
+      confirmButtonColor: "#3085d6",
+    });
+  };
+
   return (
     <div>
-      <form className="w-4/5 p-7">
+      <form className="w-4/5 p-7" onSubmit={updateEmployeeHandler}>
         <div className="grid xl:grid-cols-2 xl:gap-6">
           <div className="relative z-0 w-full mb-6 group">
             <input
@@ -23,10 +41,9 @@ const EmployeeForm = ({ employeeFormData }: any) => {
               id="floating_first_name"
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
-              // value={employeeFormData.firstName ?? ""}
-              value={_.get(employeeFormData, "firstName", [""])}
               required
-              //   onChange={(e) => setfirstName(e.target.value)}
+              value={formData.firstName}
+              onChange={handleChange}
             />
             <label
               htmlFor="floating_first_name"
@@ -43,7 +60,8 @@ const EmployeeForm = ({ employeeFormData }: any) => {
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
-              //   onChange={(e) => setlastName(e.target.value)}
+              value={formData.lastName}
+              onChange={handleChange}
             />
             <label
               htmlFor="floating_last_name"
@@ -62,7 +80,8 @@ const EmployeeForm = ({ employeeFormData }: any) => {
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
-              //   onChange={(e) => setGender(e.target.value)}
+              value={formData.Gender ?? ""}
+              onChange={handleChange}
             />
             <label
               htmlFor="Gender"
@@ -79,7 +98,8 @@ const EmployeeForm = ({ employeeFormData }: any) => {
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
-              //   onChange={(e) => setAddress(e.target.value)}
+              value={formData.Address ?? ""}
+              onChange={handleChange}
             />
             <label
               htmlFor="Address"
@@ -98,8 +118,8 @@ const EmployeeForm = ({ employeeFormData }: any) => {
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
-              // value={formData.DOB.slice(0, 10)}
-              //   onChange={(e) => setDOB(e.target.value)}
+              value={formData?.DOB?.slice(0, 10) ?? ""} //loadash
+              onChange={handleChange}
             />
             <label
               htmlFor="DOB"
@@ -108,22 +128,6 @@ const EmployeeForm = ({ employeeFormData }: any) => {
               DOB
             </label>
           </div>
-          {/* <div className="relative z-0 w-full mb-6 group">
-      <input
-        type="text"
-        name="floating_company"
-        id="floating_company"
-        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-        placeholder=" "
-        required
-      />
-      <label
-        htmlFor="floating_company"
-        className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-      >
-        Company (Ex. Google)
-      </label>
-    </div> */}
         </div>
         <button
           type="submit"
@@ -134,7 +138,6 @@ const EmployeeForm = ({ employeeFormData }: any) => {
         <button
           type="button"
           className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ml-5"
-          // onClick={()=>{clea}}
         >
           Clear
         </button>

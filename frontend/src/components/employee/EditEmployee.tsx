@@ -15,24 +15,9 @@ const EditEmployee = (props: any) => {
     DOB: DOB,
   };
 
-  // const defaultFormData  = {
-
-  // };
   const [formData, setFormData] = useState(employeeFormData);
   console.log(formData);
-  // const [_firstName, set_firstName] = useState(firstName);
-  // const [_lastName, set_lastName] = useState(lastName);
-  // const [gender, setGender] = useState(Gender);
-  // const [address, setAddress] = useState(Address);
-  // const [dob, setDOB] = useState(DOB);
 
-  // const _employee = {
-  //   firstName: _firstName,
-  //   lastName: _lastName,
-  //   Gender: gender,
-  //   Address: address,
-  //   DOB: dob,
-  // };
   const updateEmployeeHandler = async (e: any) => {
     e.preventDefault();
     const response = await EmployeeApi.put(
