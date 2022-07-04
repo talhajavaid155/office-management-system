@@ -1,4 +1,3 @@
-import React from "react";
 import { Route } from "react-router-dom";
 import "./App.css";
 import HomeScreen from "./screens/HomeScreen";
@@ -6,9 +5,12 @@ import Header from "./components/Header";
 import EmployeeScreen from "./screens/EmployeeScreen";
 import LoginPage from "./screens/Login";
 import SignupPage from "./screens/Signup";
+import EditEmployee from "./components/employee/EditEmployee";
 // import HomeScreen from "./screens/HomeScreen";
 
 function App() {
+  // const { showTasks } = useContext(EmployeeContext) as EmployeeContextType;
+
   return (
     // <div className="flex">
     <div className="min-h-full h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
