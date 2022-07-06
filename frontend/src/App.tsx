@@ -5,25 +5,29 @@ import Header from "./components/Header";
 import EmployeeScreen from "./screens/EmployeeScreen";
 import LoginPage from "./screens/Login";
 import SignupPage from "./screens/Signup";
-import EditEmployee from "./components/employee/EditEmployee";
+
+import DesignationScreen from "./screens/DesignationScreen";
+import DepartmentScreen from "./screens/DepartmentScreen";
+import EmployeeHistoryScreen from "./screens/EmployeeHistoryScreen";
+import ProjectScreen from "./screens/ProjectScreen";
 // import HomeScreen from "./screens/HomeScreen";
 
 function App() {
   // const { showTasks } = useContext(EmployeeContext) as EmployeeContextType;
 
   return (
-    // <div className="flex">
-    <div className="min-h-full h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <main>
-          <Route path="/homepage" exact component={HomeScreen} />
-          <Route path="/" exact component={LoginPage} />
-          <Route path="/signup" exact component={SignupPage} />
-          <Route path="/employees" exact component={EmployeeScreen} />
-        </main>
-      </div>
+    <div className="w-full">
+      <main>
+        <Route path="/homepage" exact component={HomeScreen} />
+        <Route path="/" exact component={LoginPage} />
+        <Route path="/signup" exact component={SignupPage} />
+        <Route path="/employees" exact component={EmployeeScreen} />
+        <Route path="/department" exact component={DepartmentScreen}></Route>
+        <Route path="/designation" exact component={DesignationScreen}></Route>
+        <Route path="/history" exact component={EmployeeHistoryScreen}></Route>
+        <Route path="/project" exact component={ProjectScreen}></Route>
+      </main>
     </div>
-    // </div>
     // {/* <HomeScreen /> */}{/* <Header /> */}
   );
 }
