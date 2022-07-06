@@ -32,7 +32,7 @@ const EmployeeForm = (props: any) => {
 
   return (
     <div>
-      <form className="w-4/5 p-7" onSubmit={updateEmployeeHandler}>
+      <form className="w-full p-7" onSubmit={updateEmployeeHandler}>
         <div className="grid xl:grid-cols-2 xl:gap-6">
           <div className="relative z-0 w-full mb-6 group">
             <input
@@ -135,6 +135,8 @@ const EmployeeForm = (props: any) => {
         >
           Submit
         </button>
+
+        {/* Only shows when there is any data in form fields */}
         <button
           type="button"
           className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ml-5"

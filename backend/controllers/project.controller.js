@@ -27,7 +27,7 @@ const addProject = asyncHandler(async (req, res) => {
   const project = {
     Title: req.body.title,
     Description: req.body.description,
-    assignedTo: req.body.description,
+    assignedTo: req.body.assignedTo,
   };
   // Save Employee in the database
   Project.create(project)
