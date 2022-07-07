@@ -7,6 +7,7 @@ const { createTokens, validateToken } = require("./jwt");
 
 const validateLoginInput = require("../validation/login");
 const validateRegisterInput = require("../validation/register");
+const { project } = require("../models");
 
 const register = asyncHandler(async (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
@@ -31,6 +32,8 @@ const register = asyncHandler(async (req, res) => {
         userName,
         Password,
         isAdmin,
+        departmentId,
+        projects,
       } = req.body;
       const newUser = {
         firstName: firstName,
@@ -41,13 +44,16 @@ const register = asyncHandler(async (req, res) => {
         userName: userName,
         Password: Password,
         isAdmin: isAdmin,
+        departmentId: departmentId,
+        projects: projects,
       };
       /////same username errors...
       //   if (err) throw err;
       bcrypt.hash(newUser.Password, 10).then((hash) => {
         newUser.Password = hash;
         Employee.create(newUser)
-          .then((data) => {
+          .then(async (data) => {
+            await data.setProjects(projects);
             res.send(data);
             res.json("Employee Registerd");
           })
@@ -69,6 +75,8 @@ const login = asyncHandler(async (req, res) => {
 
   const { userName, Password } = req.body;
 
+  // Auth User and Get Token
+  // POST /employees/register
   const user = await Employee.findOne({ where: { userName: userName } });
   if (!user) {
     res.status(400).json({ error: "Username not exist" });
@@ -87,9 +95,43 @@ const login = asyncHandler(async (req, res) => {
         maxAge: 31556926,
         httpOnly: true, // add bcz any other user can't access another cookies
       });
-      res.json("LOGGED IN");
+      res.status(201).json({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        Gender: user.Gender,
+        Address: user.Address,
+        DOB: user.DOB,
+        email: user.userName,
+        accessToken,
+      });
     }
   });
+});
+
+const getEmployeeProfile = asyncHandler(async (req, res) => {
+  const user = await Employee.findByPk(req.user.id);
+  console.log(
+    "🚀 ~ file: employee.controller.js ~ line 103 ~ getEmployeeProfile ~ user",
+    user
+  );
+
+  // res.send("SUCCESS");
+
+  if (user) {
+    res.json({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      Gender: user.Gender,
+      Address: user.Address,
+      DOB: user.DOB,
+      email: user.userName,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User Not FOund");
+  }
 });
 
 const profile = asyncHandler(async (req, res) => {
@@ -145,7 +187,12 @@ const getAllEmployees = asyncHandler(async (req, res) => {
 const getSingleEmployee = asyncHandler(async (req, res) => {
   const id = req.params.id;
 
-  Employee.findByPk(id)
+  Employee.findByPk(id, {
+    include: [
+      "department",
+      { model: project, as: "projects", through: { attributes: [] } },
+    ],
+  })
     .then((data) => {
       if (data) {
         res.send(data);
@@ -156,6 +203,10 @@ const getSingleEmployee = asyncHandler(async (req, res) => {
       }
     })
     .catch((err) => {
+      console.log(
+        "🚀 ~ file: employee.controller.js ~ line 195 ~ getSingleEmployee ~ err",
+        err
+      );
       res.status(500).send({
         message: " Error Retrieving Employee with id = " + id,
       });
@@ -164,6 +215,7 @@ const getSingleEmployee = asyncHandler(async (req, res) => {
 
 // Update Single Employee
 const updateSingleEmployee = asyncHandler(async (req, res) => {
+  // if(req.params.departmentId)
   const id = req.params.id;
   Employee.update(req.body, {
     where: { id: id },
@@ -212,7 +264,7 @@ const deleteSingleEmployee = asyncHandler(async (req, res) => {
 module.exports = {
   login,
   register,
-  profile,
+  getEmployeeProfile,
   getAllEmployees,
   // addEmployee,
   getSingleEmployee,

@@ -2,13 +2,14 @@ const express = require("express");
 const db = require("../models");
 const Employee = db.employees;
 const Op = db.Sequelize.Op;
+// const { createTokens, validateToken } = require("../controllers/jwt");
 
 const { validateToken } = require("../controllers/jwt");
 
 const {
   login,
   register,
-  profile,
+  getEmployeeProfile,
   getAllEmployees,
   // addEmployee,
   getSingleEmployee,
@@ -19,8 +20,10 @@ const {
 const router = express.Router();
 
 router.route("/login").post(login);
+router.route("/profile").get(validateToken, getEmployeeProfile);
+
 router.route("/register").post(register);
-router.route("/profile").get(validateToken, profile);
+// router.route("/profile").get(validateToken, profile);
 
 router.route("/").get(getAllEmployees);
 

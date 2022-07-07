@@ -3,12 +3,6 @@ module.exports = (sequelize, Sequelize) => {
     Title: {
       type: Sequelize.STRING,
     },
-    Description: {
-      type: Sequelize.STRING,
-    },
-    assignedTo: {
-      type: Sequelize.STRING,
-    },
   });
   return Project;
 };
