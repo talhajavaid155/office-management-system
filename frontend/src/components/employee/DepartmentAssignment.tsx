@@ -3,6 +3,23 @@ import AsyncSelect from "react-select/async";
 import Swal from "sweetalert2";
 import { EmployeeApi } from "../../api/Employee";
 
+export interface IEmployeeData {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  Gender?: string;
+  Address?: string;
+  DOB?: Date;
+  userName?: string;
+  Password?: string;
+  isAdmin?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  departmentId?: number;
+  department?: {};
+  projects?: [];
+}
+
 export interface IEmployeeInfo {
   id: string;
   firstName: string;
@@ -20,6 +37,7 @@ const DepartmentAssignment = () => {
     useState<IEmployeeInfo | null>(null);
   const [departmentSelectedValue, setDepartmentSelectedValue] =
     useState<IDepartmentInfo | null>(null);
+  const [userData, setUserData] = useState<any | null>([]);
 
   // handle input change event
   const handleUserInputChange = (value: any) => {
@@ -44,7 +62,20 @@ const DepartmentAssignment = () => {
   const fetchUsers = async () => {
     try {
       const { data } = await EmployeeApi.get("/employees");
-      return data.employees;
+      //   data.employees.map((employee: any) => {
+      //     if (employee.departmentId === null) {
+      //       console.log(
+      //         "🚀 ~ file: departmentAssignment.tsx ~ line 67 ~ emp ~ employee.departmentId",
+      //         employee.departmentId
+      //       );
+      //       setUserData(employee);
+      //       return userData;
+      //     }
+      const filteredUsers = data.employees.filter((employee: any) => {
+        return employee.departmentId === null;
+      });
+
+      return filteredUsers;
     } catch (error) {
       console.log("Error Message" + error);
     }
