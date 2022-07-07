@@ -1,6 +1,7 @@
 const db = require("../models");
 const Department = db.department;
 const asyncHandler = require("express-async-handler");
+const { employee } = require("../models");
 
 // Post Department
 
@@ -30,7 +31,7 @@ const addDepartment = asyncHandler(async (req, res) => {
 // Get All Departments
 const getAllDepartments = asyncHandler(async (req, res) => {
   try {
-    const departments = await Department.findAll();
+    const departments = await Department.findAll({ inclue: ["employee"] });
     res.status(200).json({ departments });
   } catch (error) {
     console.log("error", error);
@@ -42,7 +43,9 @@ const getAllDepartments = asyncHandler(async (req, res) => {
 // Find Department with an id
 const getSingleDepartment = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  Department.findByPk(id)
+  Department.findByPk(id, {
+    include: ["employee"],
+  })
     .then((data) => {
       if (data) {
         res.send(data);
