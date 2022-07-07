@@ -14,6 +14,8 @@ const addDesignation = asyncHandler(async (req, res) => {
   }
   const designation = {
     designationName: req.body.designationName,
+    designationGrade: req.body.designationGrade,
+    designationSalary: req.body.designationSalary,
   };
   // Save Designation in the database
   Designation.create(designation)

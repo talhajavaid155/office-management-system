@@ -33,7 +33,7 @@ const Employees = () => {
     };
     empoloyeeData();
   }, [showTasks]);
-
+  console.log("emp", employees);
   const deleteEmployeeHandler = (id: number) => {
     Swal.fire({
       title: "Are you sure?",
@@ -57,7 +57,7 @@ const Employees = () => {
   };
 
   return (
-    <div className="p-7">
+    <div className="p-7 w-full">
       <EmployeeForm employeeFormData={currentEditingEmployee} />
       <div className="mt-4 flex flex-col">
         <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
@@ -89,6 +89,9 @@ const Employees = () => {
                     </th>
                     <th className="p-3 text-sm font-semibold tracking wide text-left">
                       Updated At
+                    </th>
+                    <th className="p-3 text-sm font-semibold tracking wide text-left">
+                      Action
                     </th>
                   </tr>
                 </thead>
