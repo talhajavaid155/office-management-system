@@ -17,17 +17,23 @@ const EmployeeForm = (props: any) => {
 
   const updateEmployeeHandler = async (e: any) => {
     e.preventDefault();
-    const response = await EmployeeApi.put(
-      `/employees/${formData.id}`,
-      formData
-    );
+    try {
+      const response = await EmployeeApi.put(
+        `/employees/${formData.id}`,
+        formData
+      );
+      Swal.fire({
+        title: "Form Updated Successfully",
 
-    Swal.fire({
-      title: "Form Updated Successfully",
-
-      icon: "success",
-      confirmButtonColor: "#3085d6",
-    });
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+      });
+    } catch (error) {
+      console.log(
+        "🚀 ~ file: EmployeeForm.tsx ~ line 32 ~ updateEmployeeHandler ~ error",
+        error
+      );
+    }
   };
 
   return (

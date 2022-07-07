@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface Employee {
   id?: number;
   firstName: string;
@@ -19,4 +21,6 @@ export type EmployeeContextType = {
   setEmployees?: React.Dispatch<React.SetStateAction<Employee[]>>;
   setShowTasks?: React.Dispatch<React.SetStateAction<boolean>>;
   showTasks?: boolean;
+  setUserInfo?: React.Dispatch<React.SetStateAction<any>>;
+  userInfo?: any;
 };

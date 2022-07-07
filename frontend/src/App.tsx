@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./App.css";
 import HomeScreen from "./screens/HomeScreen";
 import Header from "./components/Header";
@@ -6,23 +6,27 @@ import EmployeeScreen from "./screens/EmployeeScreen";
 import LoginPage from "./screens/Login";
 import SignupPage from "./screens/Signup";
 import EditEmployee from "./components/employee/EditEmployee";
+import DepartmentAssignment from "./components/employee/DepartmentAssignment";
 // import HomeScreen from "./screens/HomeScreen";
 
 function App() {
   // const { showTasks } = useContext(EmployeeContext) as EmployeeContextType;
 
   return (
-    // <div className="flex">
-    <div className="min-h-full h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <BrowserRouter>
+      <div className="flex">
         <main>
-          <Route path="/homepage" exact component={HomeScreen} />
-          <Route path="/" exact component={LoginPage} />
-          <Route path="/signup" exact component={SignupPage} />
-          <Route path="/employees" exact component={EmployeeScreen} />
+          <Switch>
+            <Route path="/homepage" exact component={HomeScreen} />
+            <Route path="/" exact component={LoginPage} />
+            <Route path="/signup" exact component={SignupPage} />
+            <Route path="/employees" exact component={EmployeeScreen} />
+            <Route path="/dep" exact component={DepartmentAssignment} />
+          </Switch>
         </main>
       </div>
-    </div>
+    </BrowserRouter>
+
     // </div>
     // {/* <HomeScreen /> */}{/* <Header /> */}
   );

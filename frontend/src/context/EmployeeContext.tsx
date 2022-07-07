@@ -6,7 +6,16 @@ export const EmployeeContext = createContext<EmployeeContextType | null>(null);
 export const EmployeeProivder = (props: any) => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [showTasks, setShowTasks] = useState<boolean>(true);
-  console.log(employees);
+
+  const [userInfo, setUserInfo] = useState(
+    JSON.parse(localStorage.getItem("user") + " " ?? {})
+  );
+  console.log(
+    "🚀 ~ file: EmployeeContext.tsx ~ line 12 ~ EmployeeProivder ~ userInfo",
+    userInfo
+  );
+
+  // console.log(employees);
   // setShowTasks(true);
   // useEffect(() => {
   //   const empoloyeeData = async () => {
@@ -23,7 +32,14 @@ export const EmployeeProivder = (props: any) => {
 
   return (
     <EmployeeContext.Provider
-      value={{ employees, setEmployees, showTasks, setShowTasks }}
+      value={{
+        employees,
+        setEmployees,
+        showTasks,
+        setShowTasks,
+        setUserInfo,
+        userInfo,
+      }}
     >
       {props.children}
     </EmployeeContext.Provider>
