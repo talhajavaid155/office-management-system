@@ -22,6 +22,35 @@ db.employeeChangeHistory = require("./employeeChangeHistory.model.js")(
   sequelize,
   Sequelize
 );
+
+//Assocations
+// One to many relationship between employee and department
+db.department.hasMany(db.employee, { as: "employee" });
+db.employee.belongsTo(db.department, {
+  foreignKey: "departmentId",
+  allowNull: false,
+  as: "department",
+});
+
+// Many to many relationship between employee and project
+db.employee.belongsToMany(db.project, {
+  through: "employeeProject",
+  as: "projects",
+  foreignKey: "employeeId",
+});
+db.project.belongsToMany(db.employee, {
+  through: "employeeProject",
+  as: "employees",
+  foreignKey: "projectId",
+});
+
+// One-to-Many relationship between employee and designation
+// db.designation.hasMany(db.employee, { as: "employee" });
+// db.employee.belongsTo(db.designation, {
+//   foreignKey: "designationId",
+//   allowNull: false,
+//   as: "designation",
+// });
 // db.user = require("./user.model.js")(sequelize, Sequelize);
 
 module.exports = db;
