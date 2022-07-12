@@ -1,16 +1,24 @@
 import { useContext, useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { EmployeeApi } from "../../api/Employee";
 import { EmployeeContext } from "../../context/EmployeeContext";
 import _ from "lodash";
-import { EmployeeContextType } from "../../interfaces/EmployeeInterface";
-import { Employee } from "../../interfaces/EmployeeInterface";
+import {
+  EmployeeContextType,
+  IEmployeeData,
+} from "../../interfaces/EmployeeInterface";
 import Swal from "sweetalert2";
 import EmployeeForm from "./EmployeeForm";
+import { Api } from "../../api/Api";
 
 const Employees = () => {
+  const { userInfo } = useContext(EmployeeContext) as EmployeeContextType;
+  console.log(
+    "🚀 ~ file: Employees.tsx ~ line 14 ~ Employees ~ userInfo",
+    userInfo.accessToken
+  );
+
   const [currentEditingEmployee, setcurrentEditingEmployee] =
-    useState<Employee>({
+    useState<IEmployeeData>({
       firstName: "",
       lastName: "",
       Gender: "",
@@ -20,10 +28,21 @@ const Employees = () => {
   const { employees, setEmployees, showTasks } = useContext(
     EmployeeContext
   ) as EmployeeContextType;
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.accessToken}`,
+    },
+  };
+
   useEffect(() => {
     const empoloyeeData = async () => {
       try {
-        const { data } = await EmployeeApi.get("/employees");
+        const { data } = await Api.get("/users", config);
+        console.log(
+          "🚀 ~ file: Employees.tsx ~ line 27 ~ empoloyeeData ~ data",
+          data?.employees
+        );
         // console.log(data?.employees);
         console.log(data);
         setEmployees?.(data?.employees);
@@ -33,7 +52,7 @@ const Employees = () => {
     };
     empoloyeeData();
   }, [showTasks]);
-  console.log("emp", employees);
+
   const deleteEmployeeHandler = (id: number) => {
     Swal.fire({
       title: "Are you sure?",
@@ -45,9 +64,9 @@ const Employees = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        EmployeeApi.delete(`/employees/${id}`);
+        Api.delete(`/users/${id}`);
         setEmployees?.(
-          employees!.filter((employee) => {
+          employees!.filter((employee: IEmployeeData) => {
             return employee.id !== id;
           })
         );

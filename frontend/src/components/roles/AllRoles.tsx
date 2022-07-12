@@ -1,46 +1,38 @@
-import React, { useContext, useEffect, useState } from "react";
-import { DepartmentContext } from "../../context/DepartmentContext";
-import { DepartmentContextType } from "../../interfaces/DepartmentInterface";
 import _ from "lodash";
+import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-import DepartmentAssignment from "./DepartmentAssignment";
+import Swal from "sweetalert2";
 import { Api } from "../../api/Api";
-const AddDepartment = () => {
-  const { departments, setDepartments, setShowTasks, showTasks } = useContext(
-    DepartmentContext
-  ) as DepartmentContextType;
 
-  const [departmentName, setdepartmentName] = useState("");
-
+const AllRoles = () => {
+  const [Roles, setRoles] = useState();
+  const [roleName, setRoleName] = useState("");
   useEffect(() => {
-    const departmentData = async () => {
+    const roleData = async () => {
       try {
-        const { data } = await Api.get("/department");
+        const { data } = await Api.get("/roles");
         // console.log(data);
-        console.log("departments ", data);
-        setDepartments?.(data?.departments);
+        console.log("roles ", data);
+        setRoles?.(data?.roles);
       } catch (error) {
         console.log("Error Message" + error);
       }
     };
-    departmentData();
-  }, [showTasks]);
-  console.log("departments", departments);
+    roleData();
+  }, []);
   const onSubmit = (e: any) => {
     e.preventDefault();
 
-    Api.post("/department", {
-      departmentName: departmentName,
+    Api.post("/roles", {
+      roleName,
     }).then((response) => {
       console.log(response.data);
     });
 
     // setdepartmentName("");
-    setShowTasks?.(!showTasks);
+    // setShowTasks?.(!showTasks);
   };
-
   const deleteDepartmentHandler = (id: number) => {
     Swal.fire({
       title: "Are you sure?",
@@ -52,16 +44,12 @@ const AddDepartment = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Api.delete(`/department/${id}`);
-        setDepartments?.(
-          departments!.filter((department) => {
-            return department.id !== id;
-          })
-        );
+        Api.delete(`/roles/${id}`);
         Swal.fire("Deleted!", "Department has been deleted.", "success");
       }
     });
   };
+
   return (
     <div className="ml-10 ">
       <form className="w-4/5 p-7" onSubmit={onSubmit}>
@@ -74,13 +62,13 @@ const AddDepartment = () => {
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
-              onChange={(e) => setdepartmentName(e.target.value)}
+              onChange={(e) => setRoleName(e.target.value)}
             />
             <label
               htmlFor="departmentname"
               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
-              Department name
+              Role name
             </label>
           </div>
         </div>
@@ -92,26 +80,25 @@ const AddDepartment = () => {
           Add
         </button>
       </form>
-      <DepartmentAssignment />
-
       <h1 className="pt-3">Department Names</h1>
       <div className="grid grid-cols-3 gap-20 py-20 ml-2 ">
-        {_?.map(departments, (val, index) => {
+        {_?.map(Roles, (role: any) => {
           return (
             <div
-              key={index}
+              key={role.id}
               className="p-6 max-w-sm bg-outline-blue-700 rounded-lg border border-blue-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
             >
               <Link
-                to={`/department/${val.id}`}
+                to={`/department/${role.id}`}
                 className="inline-flex items-center py-2 px-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
-                {val.departmentName}
+                {role.roleName}
               </Link>
               <button
                 className="ml-10"
+                disabled={role.roleName === "Admin"}
                 onClick={() => {
-                  deleteDepartmentHandler(val.id!);
+                  deleteDepartmentHandler(role.id);
                 }}
               >
                 <FaTrash className="text-red-600 hover:text-red-800 hover:delay-200 cursor-pointer" />
@@ -124,4 +111,4 @@ const AddDepartment = () => {
   );
 };
 
-export default AddDepartment;
+export default AllRoles;

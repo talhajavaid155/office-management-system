@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Employee } from "../../interfaces/EmployeeInterface";
-import _ from "lodash";
-import { EmployeeApi } from "../../api/Employee";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  EmployeeContextType,
+  IEmployeeData,
+} from "../../interfaces/EmployeeInterface";
 import Swal from "sweetalert2";
+import { EmployeeContext } from "../../context/EmployeeContext";
+import { Api } from "../../api/Api";
 const EmployeeForm = (props: any) => {
-  const employeeData: Employee = props.employeeFormData;
+  const { userInfo } = useContext(EmployeeContext) as EmployeeContextType;
+  console.log(
+    "🚀 ~ file: EmployeeForm.tsx ~ line 12 ~ EmployeeForm ~ userInfo",
+    userInfo
+  );
+  const employeeData: IEmployeeData = props.employeeFormData;
   const [formData, setformData] = useState(employeeData);
   useEffect(() => {
     setformData(employeeData);
@@ -15,13 +23,16 @@ const EmployeeForm = (props: any) => {
     setformData({ ...formData, [name]: value });
   };
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.accessToken}`,
+    },
+  };
+
   const updateEmployeeHandler = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await EmployeeApi.put(
-        `/employees/${formData.id}`,
-        formData
-      );
+      const response = await Api.put(`/users/${formData.id}`, formData, config);
       Swal.fire({
         title: "Form Updated Successfully",
 
@@ -29,11 +40,20 @@ const EmployeeForm = (props: any) => {
         confirmButtonColor: "#3085d6",
       });
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: `${error}`,
+      });
       console.log(
         "🚀 ~ file: EmployeeForm.tsx ~ line 32 ~ updateEmployeeHandler ~ error",
         error
       );
     }
+  };
+
+  const clearFieldsHandler = () => {
+    // setformData()
   };
 
   return (
@@ -146,6 +166,7 @@ const EmployeeForm = (props: any) => {
         <button
           type="button"
           className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ml-5"
+          onClick={clearFieldsHandler}
         >
           Clear
         </button>

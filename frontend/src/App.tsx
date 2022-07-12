@@ -2,16 +2,18 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./App.css";
 import HomeScreen from "./screens/HomeScreen";
 // import Header from "./components/Header";
-import EmployeeScreen from "./screens/EmployeeScreen";
 import LoginPage from "./screens/Login";
 import SignupPage from "./screens/Signup";
 // import EditEmployee from "./components/employee/EditEmployee";
-import DepartmentAssignment from "./components/employee/DepartmentAssignment";
 
 import DesignationScreen from "./screens/DesignationScreen";
 import DepartmentScreen from "./screens/DepartmentScreen";
 import EmployeeHistoryScreen from "./screens/EmployeeHistoryScreen";
 import ProjectScreen from "./screens/ProjectScreen";
+import SingleDepartment from "./screens/SingleDepartment";
+import EmployeeScreen from "./screens/EmployeeScreen";
+import RolesScreen from "./screens/RolesScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 // import HomeScreen from "./screens/HomeScreen";
 
 function App() {
@@ -19,14 +21,15 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="flex">
+      <div className="w-full">
         <main>
           <Switch>
             <Route path="/homepage" exact component={HomeScreen} />
             <Route path="/" exact component={LoginPage} />
             <Route path="/signup" exact component={SignupPage} />
             <Route path="/employees" exact component={EmployeeScreen} />
-            <Route path="/dep" exact component={DepartmentAssignment} />
+            <Route path="/roles" exact component={RolesScreen} />
+
             <Route
               path="/department"
               exact
@@ -43,6 +46,12 @@ function App() {
               component={EmployeeHistoryScreen}
             ></Route>
             <Route path="/project" exact component={ProjectScreen}></Route>
+            <Route
+              path="/department/:id"
+              exact
+              component={SingleDepartment}
+            ></Route>
+            <Route path="/profile" exact component={ProfileScreen}></Route>
           </Switch>
         </main>
       </div>
