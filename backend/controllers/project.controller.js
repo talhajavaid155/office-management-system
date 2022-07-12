@@ -1,16 +1,16 @@
 const db = require("../models");
 const Project = db.project;
 const asyncHandler = require("express-async-handler");
-const { employee } = require("../models");
+const { user } = require("../models");
 // Get All Projects
 const getAllProjects = asyncHandler(async (req, res) => {
   try {
     const projects = await Project.findAll({
       include: [
-        "employees",
+        "users",
         {
-          model: employee,
-          as: "employees",
+          model: user,
+          as: "users",
           // attributes: ["id", "firstName"],
           through: { attributes: [] },
         },
@@ -61,7 +61,7 @@ const getSingleProject = asyncHandler(async (req, res) => {
       "employee",
       {
         model: employee,
-        as: "employees",
+        as: "users",
         attributes: ["id", "firstName"],
         through: { attributes: [] },
       },
