@@ -1,12 +1,14 @@
 const db = require("../models");
-const Employee = db.employee;
+const User = db.user;
+const Project = db.project;
 const asyncHandler = require("express-async-handler");
 
 const bcrypt = require("bcrypt"); //for hashing
-const { createTokens, validateToken } = require("./jwt");
-
+const { validateToken } = require("../middleware/authMiddleware");
+const { generateToken } = require("../util/generateToken");
 const validateLoginInput = require("../validation/login");
 const validateRegisterInput = require("../validation/register");
+attributes: ["id", "name", "nameKh"];
 const { project } = require("../models");
 
 const register = asyncHandler(async (req, res) => {
@@ -16,14 +18,16 @@ const register = asyncHandler(async (req, res) => {
     return res.status(400).json({ ...errors, validationFormType: "register" });
   }
 
-  Employee.findOne({ where: { userName: req.body.userName } }).then((user) => {
+  User.findOne({ where: { userName: req.body.userName } }).then((user) => {
     if (user) {
       return res.status(400).json({
         userName: "Username already exists",
         validationFormType: "register",
       });
     } else {
-      const {
+      const { firstName, lastName, Gender, Address, DOB, userName, Password } =
+        req.body;
+      const newUser = {
         firstName,
         lastName,
         Gender,
@@ -31,27 +35,12 @@ const register = asyncHandler(async (req, res) => {
         DOB,
         userName,
         Password,
-        isAdmin,
-        departmentId,
-        projects,
-      } = req.body;
-      const newUser = {
-        firstName: firstName,
-        lastName: lastName,
-        Gender: Gender,
-        Address: Address,
-        DOB: DOB,
-        userName: userName,
-        Password: Password,
-        isAdmin: isAdmin,
-        departmentId: departmentId,
-        projects: projects,
       };
       /////same username errors...
       //   if (err) throw err;
       bcrypt.hash(newUser.Password, 10).then((hash) => {
         newUser.Password = hash;
-        Employee.create(newUser)
+        User.create(newUser)
           .then(async (data) => {
             await data.setProjects(projects);
             res.send(data);
@@ -77,42 +66,73 @@ const login = asyncHandler(async (req, res) => {
 
   // Auth User and Get Token
   // POST /employees/register
-  const user = await Employee.findOne({ where: { userName: userName } });
+  // {
+  //   where: { userName: userName },
+  // include: [
+  //   "department",
+  //   "role",
+  //   { model: project, as: "projects", through: { attributes: [] } },
+  // ],
+  // }
+  const user = await User.findOne({
+    where: { userName: userName },
+    include: [
+      "department",
+      "role",
+      { model: project, as: "projects", through: { attributes: [] } },
+    ],
+  });
   if (!user) {
     res.status(400).json({ error: "Username not exist" });
   }
   //dbPassword(pswrd save in db by hashing)
   const dbPassword = user.Password;
-  bcrypt.compare(Password, dbPassword).then((match) => {
-    if (!match) {
-      res
-        .status(400)
-        .json({ error: "Wrong Username and Password Combination" });
-    } else {
-      const accessToken = createTokens(user);
+  bcrypt
+    .compare(Password, dbPassword)
+    .then((match) => {
+      if (!match) {
+        res
+          .status(400)
+          .json({ error: "Wrong Username and Password Combination" });
+      } else {
+        const accessToken = generateToken(user.id);
 
-      res.cookie("access-token", accessToken, {
-        maxAge: 31556926,
-        httpOnly: true, // add bcz any other user can't access another cookies
+        // res.cookie("access-token", accessToken, {
+        //   maxAge: 31556926,
+        //   httpOnly: true, // add bcz any other user can't access another cookies
+        // });
+        res.status(201).json({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          Gender: user.Gender,
+          Address: user.Address,
+          DOB: user.DOB,
+          email: user.userName,
+          accessToken,
+          roleId: user.roleId,
+          roleName: user?.role?.roleName,
+          departmentId: user?.departmentId,
+          departmentName: user?.department?.departmentName,
+          projects: user.projects,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(
+        "🚀 ~ file: employee.controller.js ~ line 195 ~ getSingleUser ~ err",
+        err
+      );
+      res.status(500).send({
+        message: " Error Retrieving Employee with ssssssssssssid = ",
       });
-      res.status(201).json({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        Gender: user.Gender,
-        Address: user.Address,
-        DOB: user.DOB,
-        email: user.userName,
-        accessToken,
-      });
-    }
-  });
+    });
 });
 
-const getEmployeeProfile = asyncHandler(async (req, res) => {
-  const user = await Employee.findByPk(req.user.id);
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findByPk(req.user.id);
   console.log(
-    "🚀 ~ file: employee.controller.js ~ line 103 ~ getEmployeeProfile ~ user",
+    "🚀 ~ file: employee.controller.js ~ line 103 ~ getUserProfile ~ user",
     user
   );
 
@@ -139,9 +159,9 @@ const profile = asyncHandler(async (req, res) => {
 });
 
 // Get All Employees
-const getAllEmployees = asyncHandler(async (req, res) => {
+const getAllUsers = asyncHandler(async (req, res) => {
   try {
-    const employees = await Employee.findAll();
+    const employees = await User.findAll();
     res.status(200).json({ employees });
   } catch (error) {
     console.log("error ", error);
@@ -184,40 +204,35 @@ const getAllEmployees = asyncHandler(async (req, res) => {
 // });
 
 // Find Employee with an id
-const getSingleEmployee = asyncHandler(async (req, res) => {
+const getSingleUser = asyncHandler(async (req, res) => {
   const id = req.params.id;
 
-  Employee.findByPk(id, {
+  User.findByPk(id, {
     include: [
       "department",
-      { model: project, as: "projects", through: { attributes: [] } },
+      "role",
+      {
+        model: Project,
+        as: "projects",
+        through: { attributes: [] },
+      },
     ],
-  })
-    .then((data) => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: " Cannot Find Employee with id = " + id,
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(
-        "🚀 ~ file: employee.controller.js ~ line 195 ~ getSingleEmployee ~ err",
-        err
-      );
-      res.status(500).send({
-        message: " Error Retrieving Employee with id = " + id,
+  }).then((data) => {
+    if (data) {
+      res.send(data);
+    } else {
+      res.status(404).send({
+        message: " Cannot Find Employee with id = " + id,
       });
-    });
+    }
+  });
 });
 
 // Update Single Employee
-const updateSingleEmployee = asyncHandler(async (req, res) => {
+const updateSingleUser = asyncHandler(async (req, res) => {
   // if(req.params.departmentId)
   const id = req.params.id;
-  Employee.update(req.body, {
+  User.update(req.body, {
     where: { id: id },
   })
     .then((num) => {
@@ -232,16 +247,16 @@ const updateSingleEmployee = asyncHandler(async (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).send({
-        message: "Error updating Employee with id=" + id,
-      });
+      console.log(err);
+      res.status(401);
+      throw new Error("Not Authorized, token failed");
     });
 });
 
 // Delete Employee
-const deleteSingleEmployee = asyncHandler(async (req, res) => {
+const deleteSingleUser = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  Employee.destroy({
+  User.destroy({
     where: { id: id },
   })
     .then((num) => {
@@ -256,18 +271,18 @@ const deleteSingleEmployee = asyncHandler(async (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).send({
-        message: "Error deleting Employee with id=" + id,
-      });
+      console.log(err);
+      res.status(401);
+      throw new Error("Not Authorized, token failed");
     });
 });
 module.exports = {
   login,
   register,
-  getEmployeeProfile,
-  getAllEmployees,
+  getUserProfile,
+  getAllUsers,
   // addEmployee,
-  getSingleEmployee,
-  updateSingleEmployee,
-  deleteSingleEmployee,
+  getSingleUser,
+  updateSingleUser,
+  deleteSingleUser,
 };
