@@ -35,7 +35,6 @@ const AddDepartment = () => {
       console.log(response.data);
     });
 
-    // setdepartmentName("");
     setShowTasks?.(!showTasks);
   };
 
@@ -61,7 +60,7 @@ const AddDepartment = () => {
     });
   };
   return (
-    <div className="ml-60 ">
+    <div className="ml-40 ">
       <form className="w-4/5 p-7" onSubmit={onSubmit}>
         <div className="grid xl:grid-cols-2 xl:gap-6">
           <div className="relative z-0 w-full mb-6 group">
@@ -90,17 +89,16 @@ const AddDepartment = () => {
           Add
         </button>
       </form>
-      <h1 className="py-5 ml-80">Department Names</h1>
-      <div className="grid grid-cols-3 gap-20 py-20 ml-2 ">
+      <div className="grid grid-cols-1 py-10 sm:grid-cols-2 lg:grid-cols-3 gap-20 ">
         {_?.map(departments, (val, index) => {
           return (
             <div
               key={index}
-              className="p-6 max-w-sm bg-outline-blue-700 rounded-lg border border-blue-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+              className="p-2 mr-10 max-w-sm bg-outline-blue-700 rounded-lg border border-blue-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
             >
               <a
                 href={val.departmentName}
-                className="inline-flex items-center py-2 px-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="inline-flex items-center py-2 px-4 rounded-lg text-sm font-medium text-center text-white bg-blue-700  hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 {val.departmentName}
               </a>

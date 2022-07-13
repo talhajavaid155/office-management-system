@@ -3,10 +3,7 @@ module.exports = (sequelize, Sequelize) => {
     Title: {
       type: Sequelize.STRING,
     },
-    Description: {
-      type: Sequelize.STRING,
-    },
-    assignedTo: {
+    projectImage: {
       type: Sequelize.STRING,
     },
   });

@@ -2,6 +2,33 @@ const db = require("../models");
 const Project = db.project;
 const asyncHandler = require("express-async-handler");
 
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  //reject a file
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5, //accept images upto 5MB
+  },
+  fileFilter: fileFilter,
+});
+
 // Get All Projects
 const getAllProjects = asyncHandler(async (req, res) => {
   try {
@@ -17,6 +44,7 @@ const getAllProjects = asyncHandler(async (req, res) => {
 // Post Project
 
 const addProject = asyncHandler(async (req, res) => {
+  console.log(req.file);
   // Validate Request
   if (!req.body.title) {
     res.status(400).send({
@@ -26,8 +54,7 @@ const addProject = asyncHandler(async (req, res) => {
   }
   const project = {
     Title: req.body.title,
-    Description: req.body.description,
-    assignedTo: req.body.assignedTo,
+    projectImage: req.file.path,
   };
   // Save Employee in the database
   Project.create(project)
@@ -117,4 +144,5 @@ module.exports = {
   getSingleProject,
   updateSingleProject,
   deleteSingleProject,
+  upload,
 };

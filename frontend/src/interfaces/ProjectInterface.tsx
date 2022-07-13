@@ -1,8 +1,7 @@
 export interface Project {
   id?: number;
   Title: string;
-  Description: string;
-  assignedTo: string;
+  projectImage: string;
 }
 
 export type ProjectContextType = {

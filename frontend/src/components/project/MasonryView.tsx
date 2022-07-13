@@ -31,7 +31,7 @@ const MasonryView = () => {
     });
   };
   return (
-    <div className="masonry sm:masonry-sm md:masonry-md py-20 ">
+    <div className="masonry sm:masonry-sm md:masonry-md py-20 mr-10 ">
       {_?.map(projects, (val, index) => {
         return (
           <>
@@ -43,12 +43,6 @@ const MasonryView = () => {
             </div>
             <div className="bg-gray-700 text-white p-1 break-inside ">
               <p> {`Title: ${val.Title}`}</p>
-            </div>
-            <div className="bg-gray-700 text-white p-1 break-inside ">
-              <p> {`Description: ${val.Description}`}</p>
-            </div>
-            <div className="bg-gray-700 text-white p-1 break-inside ">
-              <p> {`Assigned To: ${val.assignedTo}`} </p>
             </div>
             <div className="bg-gray-700 text-white p-1 break-inside ">
               <small>

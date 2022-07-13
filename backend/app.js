@@ -13,8 +13,6 @@ const ProjectRouter = require("./routes/project.routes");
 const DepartmentRouter = require("./routes/department.routes");
 const DesignationRouter = require("./routes/designation.routes");
 const EmployeeChangeHistoryRouter = require("./routes/employeeChangeHistory.routes");
-// const UserRouter = require("./routes/user.routes");
-
 app.use(cors(corsOptions));
 app.use(cookieParser());
 const db = require("./models");
@@ -24,13 +22,13 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// Employee Routes
+//Routes
 app.use("/employees", EmployeeRouter);
 app.use("/projects", ProjectRouter);
 app.use("/department", DepartmentRouter);
 app.use("/designation", DesignationRouter);
 app.use("/employeechangehistory", EmployeeChangeHistoryRouter);
-// app.use("/auth", UserRouter);
+app.use(express.static("uploads"));
 
 // require("./routes/tutorial.routes")(app);
 // set port, listen for requests
