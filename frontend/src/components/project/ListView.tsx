@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { ProjectApi } from "../../api/Project";
+import { Api } from "../../api/Api";
 import { ProjectContext } from "../../context/ProjectContext";
 import { ProjectContextType } from "../../interfaces/ProjectInterface";
 
@@ -22,7 +22,7 @@ const ListView = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        ProjectApi.delete(`/projects/${id}`);
+        Api.delete(`/projects/${id}`);
         setProjects?.(
           projects!.filter((project) => {
             return project.id !== id;

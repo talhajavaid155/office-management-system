@@ -1,11 +1,21 @@
 const db = require("../models");
 const Project = db.project;
 const asyncHandler = require("express-async-handler");
-
+const { user } = require("../models");
 // Get All Projects
 const getAllProjects = asyncHandler(async (req, res) => {
   try {
-    const projects = await Project.findAll();
+    const projects = await Project.findAll({
+      include: [
+        "users",
+        {
+          model: user,
+          as: "users",
+          // attributes: ["id", "firstName"],
+          through: { attributes: [] },
+        },
+      ],
+    });
     res.status(200).json({ projects });
   } catch (error) {
     console.log("error ", error);
@@ -46,7 +56,17 @@ const addProject = asyncHandler(async (req, res) => {
 const getSingleProject = asyncHandler(async (req, res) => {
   const id = req.params.id;
 
-  Project.findByPk(id)
+  Project.findByPk(id, {
+    include: [
+      "employee",
+      {
+        model: employee,
+        as: "users",
+        attributes: ["id", "firstName"],
+        through: { attributes: [] },
+      },
+    ],
+  })
     .then((data) => {
       if (data) {
         res.send(data);

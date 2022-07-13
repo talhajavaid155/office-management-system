@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 const cors = require("cors");
@@ -8,7 +7,8 @@ var corsOptions = {
   origin: "http://localhost:3000",
 };
 
-const EmployeeRouter = require("./routes/employee.routes");
+const UserRouter = require("./routes/user.routes");
+const RoleRouter = require("./routes/role.routes");
 const ProjectRouter = require("./routes/project.routes");
 const DepartmentRouter = require("./routes/department.routes");
 const DesignationRouter = require("./routes/designation.routes");
@@ -25,7 +25,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Employee Routes
-app.use("/employees", EmployeeRouter);
+app.use("/users", UserRouter);
+app.use("/roles", RoleRouter);
+
 app.use("/projects", ProjectRouter);
 app.use("/department", DepartmentRouter);
 app.use("/designation", DesignationRouter);
@@ -36,7 +38,7 @@ app.use("/employeechangehistory", EmployeeChangeHistoryRouter);
 // set port, listen for requests
 
 // Test DB
-// db.sequelize.sync();
+// db.sequelize.sync({ alter: true });
 db.sequelize
   .authenticate()
   .then(() => "DATABASE Connected!")

@@ -1,8 +1,8 @@
 module.exports = (sequelize, Sequelize) => {
-  const Project = sequelize.define("project", {
-    Title: {
+  const Role = sequelize.define("role", {
+    roleName: {
       type: Sequelize.STRING,
     },
   });
-  return Project;
+  return Role;
 };

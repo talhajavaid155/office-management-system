@@ -1,8 +1,0 @@
-import axios from "axios";
-
-export const ProjectApi = axios.create({
-  baseURL: "http://localhost:5000",
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-  },
-});

@@ -1,23 +1,23 @@
 const db = require("../models");
-const Department = db.department;
+const Role = db.role;
 const asyncHandler = require("express-async-handler");
 const { user } = require("../models");
 
-// Post Department
+// Post Role
 
-const addDepartment = asyncHandler(async (req, res) => {
+const addRole = asyncHandler(async (req, res) => {
   // Validate Request
-  if (!req.body.departmentName) {
+  if (!req.body.roleName) {
     res.status(400).send({
       message: "Content can not be empty!",
     });
     return;
   }
-  const department = {
-    departmentName: req.body.departmentName,
+  const role = {
+    roleName: req.body.roleName,
   };
   // Save Dept in the database
-  Department.create(department)
+  Role.create(role)
     .then((data) => {
       res.send(data);
     })
@@ -29,10 +29,10 @@ const addDepartment = asyncHandler(async (req, res) => {
 });
 
 // Get All Departments
-const getAllDepartments = asyncHandler(async (req, res) => {
+const getAllRoles = asyncHandler(async (req, res) => {
   try {
-    const departments = await Department.findAll({ inclue: ["user"] });
-    res.status(200).json({ departments });
+    const roles = await Role.findAll({ inclue: ["user"] });
+    res.status(200).json({ roles });
   } catch (error) {
     console.log("error", error);
     res.status(500);
@@ -41,9 +41,9 @@ const getAllDepartments = asyncHandler(async (req, res) => {
 });
 
 // Find Department with an id
-const getSingleDepartment = asyncHandler(async (req, res) => {
+const getSingleRole = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  Department.findByPk(id, {
+  Role.findByPk(id, {
     include: ["user"],
   })
     .then((data) => {
@@ -51,71 +51,71 @@ const getSingleDepartment = asyncHandler(async (req, res) => {
         res.send(data);
       } else {
         res.status(404).send({
-          message: " Cannot Find Department with id = " + id,
+          message: " Cannot Find Role with id = " + id,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: " Error Retrieving Department with id = " + id,
+        message: " Error Retrieving Role with id = " + id,
       });
       throw err;
     });
 });
 
 // Update Single Department
-const updateSingleDepartment = asyncHandler(async (req, res) => {
+const updateSingleRole = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  Department.update(req.body, {
+  Role.update(req.body, {
     where: { id: id },
   })
     .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Department was updated successfully.",
+          message: "Role was updated successfully.",
         });
       } else {
         res.send({
-          message: `Cannot update Department with id=${id}. Maybe Department was not found or req.body is empty!`,
+          message: `Cannot update Role with id=${id}. Maybe Role was not found or req.body is empty!`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error updating Department with id=" + id,
+        message: "Error updating Role with id=" + id,
       });
       throw err;
     });
 });
 
 // Delete Dept
-const deleteSingleDepartment = asyncHandler(async (req, res) => {
+const deleteSingleRole = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  Department.destroy({
+  Role.destroy({
     where: { id: id },
   })
     .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Department was deleted successfully.",
+          message: "Role was deleted successfully.",
         });
       } else {
         res.send({
-          message: `Cannot delete Department with id=${id}. Maybe Department was not found or req.body is empty!`,
+          message: `Cannot delete Role with id=${id}. Maybe Role was not found or req.body is empty!`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error deleting Department with id=" + id,
+        message: "Error deleting Role with id=" + id,
       });
     });
 });
 
 module.exports = {
-  getAllDepartments,
-  addDepartment,
-  getSingleDepartment,
-  updateSingleDepartment,
-  deleteSingleDepartment,
+  getAllRoles,
+  addRole,
+  getSingleRole,
+  updateSingleRole,
+  deleteSingleRole,
 };

@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useContext, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { EmployeeHistoryApi } from "../../api/EmployeeChangeHistory";
+import { Api } from "../../api/Api";
 import { EmployeeHistoryContext } from "../../context/EmployeeHistoryContext";
 import { EmployeeHistoryContextType } from "../../interfaces/EmployeeHistoryInterface";
 
@@ -15,7 +15,7 @@ const AddEmployeeHistory = () => {
   useEffect(() => {
     const employeeHistoryData = async () => {
       try {
-        const { data } = await EmployeeHistoryApi.get("/employeechangehistory");
+        const { data } = await Api.get("/employeechangehistory");
         console.log("history  ", data);
         setemployeeHistory?.(data?.employeeChangeHistory);
       } catch (error) {
@@ -28,7 +28,7 @@ const AddEmployeeHistory = () => {
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    EmployeeHistoryApi.post("/employeechangehistory", {
+    Api.post("/employeechangehistory", {
       Resignation: Resignation,
     }).then((response) => {
       console.log(response.data);
@@ -47,7 +47,7 @@ const AddEmployeeHistory = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        EmployeeHistoryApi.delete(`/employeechangehistory/${id}`);
+        Api.delete(`/employeechangehistory/${id}`);
         setemployeeHistory?.(
           employeeHistory!.filter((employeeHistory) => {
             return employeeHistory.id !== id;
