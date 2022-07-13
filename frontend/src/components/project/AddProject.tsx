@@ -1,9 +1,5 @@
-import _ from "lodash";
 import React, { useContext, useEffect, useState } from "react";
-import { FaTrash } from "react-icons/fa";
-import Select from "react-select";
-import Swal from "sweetalert2";
-import { ProjectApi } from "../../api/Project";
+import { Api } from "../../api/Api";
 import { ProjectContext } from "../../context/ProjectContext";
 import { ProjectContextType } from "../../interfaces/ProjectInterface";
 import GridView from "./GridView";
@@ -19,8 +15,7 @@ const AddProject = () => {
   useEffect(() => {
     const projectData = async () => {
       try {
-        const { data } = await ProjectApi.get("/projects");
-        // console.log(data);
+        const { data } = await Api.get("/projects");
         console.log("projects ", data);
         setProjects?.(data.projects);
       } catch (error) {
@@ -43,7 +38,7 @@ const AddProject = () => {
         "content-type": "multipart/form-data",
       },
     };
-    ProjectApi.post("/projects", formData, config)
+    Api.post("/projects", formData, config)
       .then((response) => {
         console.log(response.data);
       })

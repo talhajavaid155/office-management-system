@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import Header from "../components/Header";
 import AddProject from "../components/project/AddProject";
 import { ProjectProvider } from "../context/ProjectContext";

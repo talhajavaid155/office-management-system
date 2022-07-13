@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { DesignationApi } from "../../api/Designation";
 import { DesignationContext } from "../../context/DesignationContext";
 import { DesignationContextType } from "../../interfaces/DesignationInterface";
 import _ from "lodash";
+import { Api } from "../../api/Api";
 const AddDesignation = () => {
   const { designations, setDesignations, setShowTasks, showTasks } = useContext(
     DesignationContext
@@ -13,7 +13,7 @@ const AddDesignation = () => {
   useEffect(() => {
     const designationData = async () => {
       try {
-        const { data } = await DesignationApi.get("/designation");
+        const { data } = await Api.get("/designation");
         console.log("designation ", data);
         setDesignations?.(data?.designation);
       } catch (error) {
@@ -31,7 +31,7 @@ const AddDesignation = () => {
   const onSubmit = (e: any) => {
     e.preventDefault();
 
-    DesignationApi.post("/designation", {
+    Api.post("/designation", {
       designationName: designationName,
       designationGrade: designationGrade,
       designationSalary: designationSalary,
@@ -57,7 +57,7 @@ const AddDesignation = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        DesignationApi.delete(`/designation/${id}`);
+        Api.delete(`/designation/${id}`);
         setDesignations?.(
           designations!.filter((designation) => {
             return designation.id !== id;

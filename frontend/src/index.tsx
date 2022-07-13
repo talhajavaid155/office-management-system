@@ -3,17 +3,18 @@ import ReactDOM from "react-dom/client";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import App from "./App";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
-import { EmployeeProivder } from "./context/EmployeeContext";
+import { EmployeeProvider } from "./context/EmployeeContext";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <Router>
-    <EmployeeProivder>
+    <EmployeeProvider>
       <App />
-    </EmployeeProivder>
+    </EmployeeProvider>
   </Router>
 );
 
