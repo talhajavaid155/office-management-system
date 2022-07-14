@@ -8,7 +8,6 @@ const { validateToken } = require("../middleware/authMiddleware");
 const { generateToken } = require("../util/generateToken");
 const validateLoginInput = require("../validation/login");
 const validateRegisterInput = require("../validation/register");
-attributes: ["id", "name", "nameKh"];
 const { project } = require("../models");
 
 const register = asyncHandler(async (req, res) => {
@@ -17,7 +16,6 @@ const register = asyncHandler(async (req, res) => {
   if (!isValid) {
     return res.status(400).json({ ...errors, validationFormType: "register" });
   }
-
   User.findOne({ where: { userName: req.body.userName } }).then((user) => {
     if (user) {
       return res.status(400).json({
@@ -95,7 +93,7 @@ const login = asyncHandler(async (req, res) => {
           .status(400)
           .json({ error: "Wrong Username and Password Combination" });
       } else {
-        const accessToken = generateToken(user.id);
+        const accessToken = generateToken(user);
 
         // res.cookie("access-token", accessToken, {
         //   maxAge: 31556926,

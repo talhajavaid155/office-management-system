@@ -1,26 +1,33 @@
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Api } from "../../api/Api";
+import { RoleContext } from "../../context/RoleContext";
+import { RoleContextType } from "../../interfaces/RoleInterface";
 
 const AllRoles = () => {
-  const [Roles, setRoles] = useState();
+  const { roles, setRoles, showTasks } = useContext(
+    RoleContext
+  ) as RoleContextType;
+
+  // const [Roles, setRoles] = useState();
   const [roleName, setRoleName] = useState("");
   useEffect(() => {
     const roleData = async () => {
       try {
         const { data } = await Api.get("/roles");
-        // console.log(data);
         console.log("roles ", data);
-        setRoles?.(data?.roles);
+        setRoles?.(data.roles);
       } catch (error) {
         console.log("Error Message" + error);
       }
     };
     roleData();
-  }, []);
+  }, [showTasks]);
+
+  console.log("ROLES", roles);
   const onSubmit = (e: any) => {
     e.preventDefault();
 
@@ -29,9 +36,7 @@ const AllRoles = () => {
     }).then((response) => {
       console.log(response.data);
     });
-
-    // setdepartmentName("");
-    // setShowTasks?.(!showTasks);
+    setRoleName("");
   };
   const deleteDepartmentHandler = (id: number) => {
     Swal.fire({
@@ -45,6 +50,11 @@ const AllRoles = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         Api.delete(`/roles/${id}`);
+        setRoles?.(
+          roles!.filter((role) => {
+            return role.id !== id;
+          })
+        );
         Swal.fire("Deleted!", "Department has been deleted.", "success");
       }
     });
@@ -59,7 +69,7 @@ const AllRoles = () => {
               type="text"
               name="departmentname"
               id="departmentname"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
               onChange={(e) => setRoleName(e.target.value)}
@@ -80,9 +90,9 @@ const AllRoles = () => {
           Add
         </button>
       </form>
-      <h1 className="pt-3">Department Names</h1>
-      <div className="grid grid-cols-3 gap-20 py-20 ml-2 ">
-        {_?.map(Roles, (role: any) => {
+      <h1 className="px-7 pt-3 text-lg font-bold">Roles</h1>
+      <div className="grid grid-cols-3 gap-20 p-3 ml-2 ">
+        {_.map(roles, (role: any) => {
           return (
             <div
               key={role.id}

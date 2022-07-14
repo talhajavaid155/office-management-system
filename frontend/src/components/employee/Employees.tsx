@@ -132,6 +132,7 @@ const Employees = () => {
                       <td
                         onClick={(e) => {
                           // formdata(error)
+                          alert("ASASA");
                         }}
                       >
                         {employee.Address}

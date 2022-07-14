@@ -14,8 +14,6 @@ const Header = () => {
     document.location.href = "/";
   };
 
-  console.log("🚀 ~ file: Header.tsx ~ line 8 ~ Header ~ userInfo", userInfo);
-
   return (
     <aside className=" flex" aria-label="Sidebar">
       <div className="overflow-y-auto h-screen py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
@@ -148,7 +146,7 @@ const Header = () => {
           {userInfo?.roleName === "Admin" ? (
             <li>
               <Link
-                to="#"
+                to="/roles"
                 className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg

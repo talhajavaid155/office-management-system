@@ -8,10 +8,6 @@ import { EmployeeContext } from "../../context/EmployeeContext";
 import { Api } from "../../api/Api";
 const EmployeeForm = (props: any) => {
   const { userInfo } = useContext(EmployeeContext) as EmployeeContextType;
-  console.log(
-    "🚀 ~ file: EmployeeForm.tsx ~ line 12 ~ EmployeeForm ~ userInfo",
-    userInfo
-  );
   const employeeData: IEmployeeData = props.employeeFormData;
   const [formData, setformData] = useState(employeeData);
   useEffect(() => {

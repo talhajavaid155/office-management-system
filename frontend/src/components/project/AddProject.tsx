@@ -5,6 +5,7 @@ import { ProjectContextType } from "../../interfaces/ProjectInterface";
 import GridView from "./GridView";
 import ListView from "./ListView";
 import MasonryView from "./MasonryView";
+import { ProjectAssignment } from "./ProjectAssignment";
 const AddProject = () => {
   const { projects, setProjects, setShowTasks, showTasks } = useContext(
     ProjectContext
@@ -16,7 +17,7 @@ const AddProject = () => {
     const projectData = async () => {
       try {
         const { data } = await Api.get("/projects");
-        console.log("projects ", data);
+        // console.log("projects ", data);
         setProjects?.(data.projects);
       } catch (error) {
         console.log("Error Message" + error);
@@ -24,7 +25,7 @@ const AddProject = () => {
     };
     projectData();
   }, [showTasks]);
-  console.log("projects", projects);
+  // console.log("projects", projects);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -81,7 +82,7 @@ const AddProject = () => {
               type="text"
               name="Title"
               id="Title"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
               onChange={(e) => setTitle(e.target.value)}
@@ -93,6 +94,7 @@ const AddProject = () => {
               Project Title
             </label>
           </div>
+
         </div>
 
         <div className="relative z-0 w-full mb-6 group">
@@ -104,6 +106,7 @@ const AddProject = () => {
             onChange={(e) => setImage(e.target.files![0])}
           />
           <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"></label>
+
         </div>
         <button
           type="submit"
@@ -113,6 +116,8 @@ const AddProject = () => {
           Add
         </button>
       </form>
+      <ProjectAssignment />
+
       <br />
       <br />
       <button

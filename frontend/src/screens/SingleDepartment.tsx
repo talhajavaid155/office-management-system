@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Api } from "../api/Api";
 import { Department } from "../interfaces/DepartmentInterface";
@@ -71,6 +72,9 @@ const SingleDepartment = ({ match }: any) => {
                       <th className="p-3 text-sm font-semibold tracking wide text-left">
                         DOB
                       </th>
+                      <th className="p-3 text-sm font-semibold tracking wide text-left">
+                        Action
+                      </th>
                     </tr>
                   </thead>
                   {_.map(Employees, (employee: any, key: any) => {
@@ -98,6 +102,22 @@ const SingleDepartment = ({ match }: any) => {
                         <td>{employee.DOB.toString().slice(0, 10)}</td>
                         <td>{employee.createdAt.toString().slice(0, 10)}</td>
                         <td>{employee.updatedAt.toString().slice(0, 10)}</td>
+                        <div className="flex">
+                          <button
+                            onClick={() => {
+                              // deleteEmployeeHandler(employee.id);
+                            }}
+                          >
+                            <FaTrash className="my-7 mx-3 text-red-600 hover:text-red-800 hover:delay-200 cursor-pointer" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              // setcurrentEditingEmployee(employee);
+                            }}
+                          >
+                            <FaEdit className="my-7 mx-3 text-blue-500 hover:text-blue-800 hover:delay-200 cursor-pointer" />
+                          </button>
+                        </div>
                       </tr>
                     );
                   })}
