@@ -45,12 +45,11 @@ const ListView = () => {
             key={index}
             className="col-span-1 list-group-item  list-group-item-action flex-column align-items-start  d-flex w-85 justify-content-between"
           >
-            <h5 className="mb-1">{`Id: ${val.id}`}</h5>
-
             <h5 className="mb-1">{`Title: ${val.Title}`}</h5>
-            <h5 className="mb-1">{`${val.projectImage}`}</h5>
-            {/* <img src="http://localhost:5000/download%20(4).png" /> */}
-
+            <img
+              src={`http://localhost:5000/${val.projectImage}`}
+              alt="project image"
+            />
             <small>
               <button
                 className="ml-80"
