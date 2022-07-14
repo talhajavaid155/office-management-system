@@ -41,10 +41,12 @@ const GridView = () => {
               key={index}
               className="p-6 max-w-sm bg-outline-blue-700 rounded-lg border border-blue-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
             >
-              <p>{`id: ${val.id}`}</p>
-              {/* {`${val.projectImage}`} */}
               <p>{`Title: ${val.Title}`}</p>
-              {/* <img src={val.projectImage} alt="" /> */}
+
+              <img
+                src={`http://localhost:5000/${val.projectImage}`}
+                alt="project image"
+              />
 
               <small>
                 <button

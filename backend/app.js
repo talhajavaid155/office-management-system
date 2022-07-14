@@ -30,7 +30,7 @@ app.use("/projects", ProjectRouter);
 app.use("/department", DepartmentRouter);
 app.use("/designation", DesignationRouter);
 app.use("/employeechangehistory", EmployeeChangeHistoryRouter);
-app.use(express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 
 // require("./routes/tutorial.routes")(app);
 // set port, listen for requests

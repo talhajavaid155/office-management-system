@@ -39,10 +39,13 @@ const MasonryView = () => {
               key={index}
               className="bg-gray-700 text-white p-1 break-inside "
             >
-              <p> {`Id: ${val.id}`}</p>
+              <p> {`Title: ${val.Title}`}</p>
             </div>
             <div className="bg-gray-700 text-white p-1 break-inside ">
-              <p> {`Title: ${val.Title}`}</p>
+              <img
+                src={`http://localhost:5000/${val.projectImage}`}
+                alt="project image"
+              />
             </div>
             <div className="bg-gray-700 text-white p-1 break-inside ">
               <small>

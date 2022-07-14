@@ -1,12 +1,12 @@
 const db = require("../models");
 const Project = db.project;
 const asyncHandler = require("express-async-handler");
-
+const { user } = require("../models");
 const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./uploads/");
+    cb(null, "uploads");
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -27,7 +27,7 @@ const upload = multer({
     fileSize: 1024 * 1024 * 5, //accept images upto 5MB
   },
   fileFilter: fileFilter,
-});
+}).single("projectImage");
 
 // Get All Projects
 const getAllProjects = asyncHandler(async (req, res) => {
@@ -85,9 +85,9 @@ const getSingleProject = asyncHandler(async (req, res) => {
 
   Project.findByPk(id, {
     include: [
-      "employee",
+      "users",
       {
-        model: employee,
+        model: user,
         as: "users",
         attributes: ["id", "firstName"],
         through: { attributes: [] },
