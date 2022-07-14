@@ -37,7 +37,6 @@ const AddDepartment = () => {
       console.log(response.data);
     });
 
-    // setdepartmentName("");
     setShowTasks?.(!showTasks);
   };
 
@@ -63,7 +62,7 @@ const AddDepartment = () => {
     });
   };
   return (
-    <div className="ml-10 ">
+    <div className="ml-40 ">
       <form className="w-4/5 p-7" onSubmit={onSubmit}>
         <div className="grid xl:grid-cols-2 xl:gap-6">
           <div className="relative z-0 w-full mb-6 group">
@@ -95,12 +94,12 @@ const AddDepartment = () => {
       <DepartmentAssignment />
 
       <h1 className="pt-3">Department Names</h1>
-      <div className="grid grid-cols-3 gap-20 py-20 ml-2 ">
+      <div className="grid grid-cols-1 py-10 sm:grid-cols-2 lg:grid-cols-3 gap-20">
         {_?.map(departments, (val, index) => {
           return (
             <div
               key={index}
-              className="p-6 max-w-sm bg-outline-blue-700 rounded-lg border border-blue-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+              className="p-2 mr-10 max-w-sm bg-outline-blue-700 rounded-lg border border-blue-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
             >
               <Link
                 to={`/department/${val.id}`}

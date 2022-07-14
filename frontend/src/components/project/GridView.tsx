@@ -7,7 +7,7 @@ import { ProjectContext } from "../../context/ProjectContext";
 import { ProjectContextType } from "../../interfaces/ProjectInterface";
 
 const GridView = () => {
-  const { projects, setProjects, setShowTasks, showTasks } = useContext(
+  const { projects, setProjects } = useContext(
     ProjectContext
   ) as ProjectContextType;
 
@@ -34,7 +34,7 @@ const GridView = () => {
   };
   return (
     <div>
-      <div className="grid grid-cols-3 gap-10 py-20 ml-2  ">
+      <div className="grid grid-cols-1 mr-10 py-10 sm:grid-cols-2 lg:grid-cols-3 gap-20  ">
         {_?.map(projects, (val, index) => {
           return (
             <div
@@ -42,12 +42,10 @@ const GridView = () => {
               className="p-6 max-w-sm bg-outline-blue-700 rounded-lg border border-blue-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
             >
               <p>{`id: ${val.id}`}</p>
-
+              {/* {`${val.projectImage}`} */}
               <p>{`Title: ${val.Title}`}</p>
+              {/* <img src={val.projectImage} alt="" /> */}
 
-              <p>{`Description: ${val.Description}`}</p>
-
-              <p>{`Assigned To:  ${val.assignedTo}`}</p>
               <small>
                 <button
                   className="ml-10"
@@ -55,7 +53,7 @@ const GridView = () => {
                     deleteProjectHandler(val.id!);
                   }}
                 >
-                  <FaTrash className="ml-40  text-red-600 hover:text-red-800 hover:delay-200 cursor-pointer" />
+                  <FaTrash className="text-red-600 hover:text-red-800 hover:delay-200 cursor-pointer" />
                 </button>
               </small>
             </div>

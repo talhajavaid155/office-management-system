@@ -9,12 +9,14 @@ const {
   getSingleProject,
   updateSingleProject,
   deleteSingleProject,
+  upload,
 } = require("../controllers/project.controller");
 
 const router = express.Router();
 
 router.route("/").get(getAllProjects);
-router.route("/").post(addProject);
+
+router.route("/").post(upload.single("projectImage"), addProject);
 
 router.route("/:id").get(getSingleProject);
 

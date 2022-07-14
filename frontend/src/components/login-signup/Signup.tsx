@@ -15,15 +15,7 @@ const Signup = () => {
   const { userInfo } = useContext(EmployeeContext) as EmployeeContextType;
 
   const fields = signupFields;
-  let fieldsState: any = {
-    // firstname: "",
-    // lastname: " ",
-    // address: "",
-    // gender: "",
-    // dob: "",
-    // username: "",
-    // password: "",
-  };
+  let fieldsState: any = {};
 
   fields.forEach((field) => (fieldsState[field.id] = ""));
 
@@ -81,7 +73,7 @@ const Signup = () => {
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-      <div className="">
+      <div className="-space-y-px">
         {fields.map((field) => (
           <Input
             key={field.id}
