@@ -13,10 +13,25 @@ const ProfileScreen = ({ location }: any) => {
   const { id } = location.state.user;
   const [formData, setFormData] = useState<IEmployeeData>();
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo?.accessToken}`,
+    },
+  };
+  console.log(
+    "🚀 ~ file: ProfileScreen.tsx ~ line 11 ~ ProfileScreen ~ userInfo",
+    userInfo
+  );
+
+  console.log(
+    "🚀 ~ file: ProfileScreen.tsx ~ line 21 ~ ProfileScreen ~ config",
+    config
+  );
+
   useEffect(() => {
     const empoloyeeData = async () => {
       try {
-        const { data } = await Api.get(`/users/${id}`);
+        const { data } = await Api.get(`/users/${id}`, config);
 
         setFormData(data);
       } catch (error) {
@@ -26,11 +41,10 @@ const ProfileScreen = ({ location }: any) => {
     empoloyeeData();
   }, [userInfo]);
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${userInfo?.token}`,
-    },
-  };
+  console.log(
+    "🚀 ~ file: ProfileScreen.tsx ~ line 166 ~ ProfileScreen ~ formData",
+    formData
+  );
 
   const updateEmployeeHandler = async (e: any) => {
     e.preventDefault();
@@ -40,7 +54,10 @@ const ProfileScreen = ({ location }: any) => {
         formData,
         config
       );
-      localStorage.setItem("user", JSON.stringify(formData));
+      localStorage.setItem(
+        "user",
+        JSON.stringify(formData, userInfo.accessToken)
+      );
       Swal.fire({
         title: "Form Updated Successfully",
         icon: "success",
@@ -52,10 +69,6 @@ const ProfileScreen = ({ location }: any) => {
         title: "Oops...",
         text: `${error}`,
       });
-      console.log(
-        "🚀 ~ file: EmployeeForm.tsx ~ line 32 ~ updateEmployeeHandler ~ error",
-        error
-      );
     }
   };
 

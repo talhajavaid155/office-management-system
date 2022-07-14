@@ -13,14 +13,6 @@ export const EmployeeProvider = (props: any) => {
   const [userInfo, setUserInfo] = useState(
     JSON.parse(localStorage.getItem("user") + " " ?? {})
   );
-  console.log(
-    "🚀 ~ file: EmployeeContext.tsx ~ line 12 ~ EmployeeProivder ~ userInfo",
-    userInfo
-  );
-  console.log(
-    "🚀 ~ file: EmployeeContext.tsx ~ line 8 ~ EmployeeProvider ~ employees",
-    employees
-  );
 
   // console.log(employees);
   // setShowTasks(true);

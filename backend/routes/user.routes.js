@@ -24,7 +24,7 @@ router.route("/profile").put(validateToken, getUserProfile);
 router.route("/register").post(register);
 // router.route("/profile").get(validateToken, profile);
 
-router.route("/").get(validateToken, getAllUsers);
+router.route("/").get(validateToken, admin, getAllUsers);
 
 // router.route("/").post(addEmployee);
 

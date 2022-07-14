@@ -5,6 +5,7 @@ import { ProjectContextType } from "../../interfaces/ProjectInterface";
 import GridView from "./GridView";
 import ListView from "./ListView";
 import MasonryView from "./MasonryView";
+import { ProjectAssignment } from "./ProjectAssignment";
 const AddProject = () => {
   const { projects, setProjects, setShowTasks, showTasks } = useContext(
     ProjectContext
@@ -17,7 +18,7 @@ const AddProject = () => {
     const projectData = async () => {
       try {
         const { data } = await Api.get("/projects");
-        console.log("projects ", data);
+        // console.log("projects ", data);
         setProjects?.(data.projects);
       } catch (error) {
         console.log("Error Message" + error);
@@ -25,7 +26,7 @@ const AddProject = () => {
     };
     projectData();
   }, [showTasks]);
-  console.log("projects", projects);
+  // console.log("projects", projects);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -77,7 +78,7 @@ const AddProject = () => {
               type="text"
               name="Title"
               id="Title"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
               onChange={(e) => setTitle(e.target.value)}
@@ -89,40 +90,6 @@ const AddProject = () => {
               Project Title
             </label>
           </div>
-          <div className="relative z-0 w-full mb-6 group">
-            <input
-              type="text"
-              name="Description"
-              id="Description"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              required
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <label
-              htmlFor="Description"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Project Description
-            </label>
-          </div>
-        </div>
-        <div className="relative z-0 w-full mb-6 group">
-          <input
-            type="text"
-            name="assignedTo"
-            id="assignedTo"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-            required
-            onChange={(e) => setassignedTo(e.target.value)}
-          />
-          <label
-            htmlFor="assignedTo"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            Assigned To
-          </label>
         </div>
         <button
           type="submit"
@@ -132,6 +99,8 @@ const AddProject = () => {
           Add
         </button>
       </form>
+      <ProjectAssignment />
+
       <br />
       <br />
       <button
@@ -171,40 +140,6 @@ const AddProject = () => {
       {gridView ? <GridView /> : ""}
       {listView ? <ListView /> : ""}
       {masonryView ? <MasonryView /> : ""}
-
-      {/* <div className="form-check form-check-inline">
-        <input
-          className="form-check-input"
-          type="radio"
-          name="flexRadioDefault"
-          id="flexRadioDefault1"
-          checked
-      
-          onClick={showList}
-        />
-        <label className="form-check-label">List</label>
-      </div>
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="radio"
-          name="flexRadioDefault"
-      
-          id="flexRadioDefault2"
-          onClick={showGrid}
-        />
-        <label className="form-check-label">Grid</label>
-      </div>
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="radio"
-          name="flexRadioDefault"
-      
-          id="flexRadioDefault2"
-        />
-        <label className="form-check-label">Masonry</label>
-      </div> */}
     </div>
   );
 };

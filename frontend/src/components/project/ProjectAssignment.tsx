@@ -1,45 +1,60 @@
 import React, { useContext, useEffect, useState } from "react";
-import AsyncSelect from "react-select/async";
 import Swal from "sweetalert2";
 import { Api } from "../../api/Api";
+import AsyncSelect from "react-select/async";
 import { EmployeeContext } from "../../context/EmployeeContext";
 import {
   EmployeeContextType,
   IEmployeeInfo,
 } from "../../interfaces/EmployeeInterface";
+import Select from "react-select";
 
-export interface IDepartmentInfo {
+export interface IProjectInfo {
   id: string;
-  departmentName: string;
+  Title: string;
 }
-const DepartmentAssignment = () => {
+export const ProjectAssignment = () => {
   const { userInfo } = useContext(EmployeeContext) as EmployeeContextType;
 
-  const [userInputValue, setUserInputValue] = useState();
-  const [departmentInputValue, setDepartmentInputValue] = useState();
-  const [userSelectedValue, setUserSelectedValue] =
-    useState<IEmployeeInfo | null>(null);
-  const [departmentSelectedValue, setDepartmentSelectedValue] =
-    useState<IDepartmentInfo | null>(null);
+  const [userSelectedValue, setUserSelectedValue] = useState([]);
+  const [projectSelectedValue, setProjectSelectedValue] = useState([]);
+
+  const [userOptions, setUserOptions] = useState([]);
+  const [projectOptions, setProjectOptions] = useState([]);
+
+  const [projectInputValue, setProjectInputValue] = useState();
 
   // handle input change event
-  const handleUserInputChange = (value: any) => {
-    setUserInputValue(value);
-  };
+  // const handleUserInputChange = (value: any) => {
+  //   setUserInputValue(value);
+  // };
 
   // handle input change event
-  const handleDepartmentInputChange = (value: any) => {
-    setDepartmentInputValue(value);
-  };
+  // const handleProjectInputChange = (value: any) => {
+  //   setProjectInputValue(value);
+  // };
 
   // handle selection
   const handleUserChange = (value: any) => {
-    setUserSelectedValue(value);
+    console.log("SSSSSSSSSSSSSs" + typeof value);
+    setUserSelectedValue(value.value);
+    // setUserSelectedValue(value);
   };
-
+  console.log(
+    "🚀 ~ file: ProjectAssignment.tsx ~ line 143 ~ ProjectAssignment ~ userSelectedValue",
+    userSelectedValue
+  );
+  console.log(
+    "🚀 ~ file: ProjectAssignment.tsx ~ line 143 ~ ProjectAssignment ~ userSelectedValue",
+    projectSelectedValue
+  );
   // handle selection
-  const handleDepartmentChange = (value: any) => {
-    setDepartmentSelectedValue(value);
+  const handleProjectChange = (value: any) => {
+    setProjectSelectedValue(
+      value.map((val: any) => {
+        return val.value;
+      })
+    );
   };
   const config = {
     headers: {
@@ -50,47 +65,62 @@ const DepartmentAssignment = () => {
   const fetchUsers = async () => {
     try {
       const { data } = await Api.get("/users", config);
-      const allUserData = data.employees.filter((employee: any) => {
+      const allUsers = data.employees.filter((employee: any) => {
         return employee.departmentId === null;
       });
-      const filteredUsers = allUserData.map((user: any) => {
+
+      const filteredUsers = allUsers.map((user: any) => {
         return {
-          value: user.firstName,
+          value: user.id,
           label: user.firstName,
         };
       });
+      setUserOptions(filteredUsers);
       console.log(
         "🚀 ~ file: DepartmentAssignment.tsx ~ line 63 ~ filteredUsers ~ filteredUsers",
         filteredUsers
       );
 
-      return allUserData;
+      return allUsers;
     } catch (error) {
       console.log("Error Message" + error);
     }
   };
 
-  const fetchDepartments = async () => {
+  const fetchProjects = async () => {
     try {
-      const { data } = await Api.get("/department");
-      return data.departments;
+      const { data } = await Api.get("/projects", config);
+      const users = data.projects.map((project: any) => {
+        return {
+          value: project.id,
+          label: project.Title,
+        };
+      });
+
+      setProjectOptions(users);
+      return users;
+      // return data.departments;
     } catch (error) {
       console.log("Error Message" + error);
     }
   };
+
+  useEffect(() => {
+    fetchUsers();
+    fetchProjects();
+  }, []);
+
   // Assigning department to user
   const submitHandler = async (e: any) => {
     e.preventDefault();
     try {
-      const depId = { departmentId: departmentSelectedValue?.id };
+      const projects = { projects: projectSelectedValue };
+
       const response = await Api.put(
-        `/users/${userSelectedValue?.id}`,
-        depId,
+        `/users/${userSelectedValue}`,
+        projects,
         config
       );
-
-      setUserSelectedValue(null);
-      setDepartmentSelectedValue(null);
       Swal.fire({
         title: "Department Assigned Successfully",
 
@@ -111,29 +141,13 @@ const DepartmentAssignment = () => {
     <div className="container">
       <div className="row">
         <div className="col-md-4">
-          <AsyncSelect
-            cacheOptions
-            defaultOptions
-            value={userSelectedValue}
-            loadOptions={fetchUsers}
-            getOptionLabel={(e: IEmployeeInfo) =>
-              `${e.firstName} ${e.lastName}`
-            }
-            getOptionValue={(e: IEmployeeInfo) => e.id}
-            onInputChange={handleUserInputChange}
-            onChange={handleUserChange}
-          />
+          <Select options={userOptions} onChange={handleUserChange} />
         </div>
         <div className="col-md-4">
-          <AsyncSelect
-            cacheOptions
-            defaultOptions
-            value={departmentSelectedValue}
-            loadOptions={fetchDepartments}
-            getOptionLabel={(e: IDepartmentInfo) => e.departmentName}
-            getOptionValue={(e: IDepartmentInfo) => e.id}
-            onInputChange={handleDepartmentInputChange}
-            onChange={handleDepartmentChange}
+          <Select
+            isMulti
+            options={projectOptions}
+            onChange={handleProjectChange}
           />
         </div>
         <button
@@ -147,5 +161,3 @@ const DepartmentAssignment = () => {
     </div>
   );
 };
-
-export default DepartmentAssignment;
